@@ -127,7 +127,7 @@ static CGFloat const kAdjustHeight = 70.f;
         }
     } else {
         if (contentOffset.y + scrollView.bounds.size.height - scrollView.contentInset.bottom - scrollView.contentSize.height >= 0) {
-            self.y = scrollView.contentSize.height + contentOffset.y + scrollView.bounds.size.height - scrollView.contentInset.bottom - scrollView.contentSize.height;
+            self.y = contentOffset.y + scrollView.bounds.size.height - scrollView.contentInset.bottom;
         }
     }
 }
@@ -174,7 +174,7 @@ static CGFloat const kAdjustHeight = 70.f;
 - (void)scrollToBottom {
     if (!self.superview || ![self.superview isKindOfClass:[UIScrollView class]]) return ;
     UIScrollView *scrollView = (UIScrollView *)self.superview;
-    if (scrollView.contentSize.height - scrollView.contentOffset.y - scrollView.bounds.size.height < kAdjustHeight) {
+    if (scrollView.contentSize.height - scrollView.contentOffset.y - scrollView.bounds.size.height < kAdjustHeight && scrollView.contentSize.height > scrollView.bounds.size.height + kAdjustHeight) {
         CGPoint bottomOffset = CGPointMake(0, scrollView.contentSize.height - scrollView.bounds.size.height + scrollView.contentInset.bottom);
         [UIView animateWithDuration:self.canAnimate ? self.showAnimationDuration : 0 animations:^{
             [scrollView setContentOffset:bottomOffset animated:NO];
