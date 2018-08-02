@@ -45,12 +45,6 @@ static CGFloat const kAdjustHeight = 70.f;
     [self adjustScrollViewTopBottom];
 }
 
-- (void)removeFromSuperview {
-    if (!self.superview || ![self.superview isKindOfClass:[UIScrollView class]]) return ;
-    [self dismiss];
-    [super removeFromSuperview];
-}
-
 - (void)layoutSubviews {
     [super layoutSubviews];
     [self refreshScrollViewContentInset];
