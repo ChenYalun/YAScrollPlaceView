@@ -82,32 +82,7 @@ typedef NS_ENUM(NSUInteger, YAScrollPlaceViewType){
 @property  YAScrollHeaderView *scrollHeaderView;
 @property  YAScrollFooterView *scrollFooterView;
 @end
-@implementation UIScrollView (YAScrollPlaceView)
-@dynamic scrollHeaderView;
-@dynamic scrollFooterView;
 
-- (YAScrollHeaderView *)scrollHeaderView {
-    return objc_getAssociatedObject(self, @selector(scrollHeaderView));
-}
-
-- (void)setScrollHeaderView:(YAScrollHeaderView *)scrollHeaderView {
-    if (scrollHeaderView == self.scrollHeaderView) return ;
-    [self.scrollHeaderView removeFromSuperview];
-    [self addSubview:scrollHeaderView];
-    objc_setAssociatedObject(self, @selector(scrollHeaderView), scrollHeaderView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-
-- (YAScrollFooterView *)scrollFooterView {
-    return objc_getAssociatedObject(self, @selector(scrollFooterView));
-}
-
-- (void)setScrollFooterView:(YAScrollFooterView *)scrollFooterView {
-    if (scrollFooterView == self.scrollFooterView) return ;
-    [self.scrollFooterView removeFromSuperview];
-    [self addSubview:scrollFooterView];
-    objc_setAssociatedObject(self, @selector(scrollFooterView), scrollFooterView, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
-}
-@end
 
 
 
@@ -118,24 +93,4 @@ typedef NS_ENUM(NSUInteger, YAScrollPlaceViewType){
 @property (nonatomic, assign) CGFloat x;
 @property (nonatomic, assign) CGFloat y;
 @end
-@implementation UIView (YAExtension)
-- (CGFloat)x {
-    return self.frame.origin.x;
-}
 
-- (CGFloat)y {
-    return self.frame.origin.y;
-}
-
-- (void)setX:(CGFloat)x {
-    CGRect frame = self.frame;
-    frame.origin.x = x;
-    self.frame = frame;
-}
-
-- (void)setY:(CGFloat)y {
-    CGRect frame = self.frame;
-    frame.origin.y = y;
-    self.frame = frame;
-}
-@end
