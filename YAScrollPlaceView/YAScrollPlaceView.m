@@ -31,7 +31,7 @@ static CGFloat const kAdjustHeight = 70.f;
     [self removeObserver];
 }
 
-- (void)didMoveToSuperview{
+- (void)didMoveToSuperview {
     if (!self.superview || ![self.superview isKindOfClass:[UIScrollView class]]) return ;
     [self.superview addObserver:self
                      forKeyPath:NSStringFromSelector(@selector(contentSize))
@@ -42,7 +42,6 @@ static CGFloat const kAdjustHeight = 70.f;
                         options:NSKeyValueObservingOptionNew
                         context:kYAScrollPlaceViewKVOContext];
     [self showWithCompletion:nil];
-    [self adjustScrollViewTopBottom];
 }
 
 - (void)layoutSubviews {
@@ -103,10 +102,10 @@ static CGFloat const kAdjustHeight = 70.f;
     }];
 }
 
-- (void)adjustPlaceWithContentOffset:(id)newPoint {
+- (void)adjustPlaceWithContentOffset {
     if (!self.isFixed) return ;
-    CGPoint contentOffset = [newPoint CGPointValue];
     UIScrollView *scrollView = (UIScrollView *)self.superview;
+    CGPoint contentOffset = scrollView.contentOffset;
     if (self->scrollPlaceViewType == YAScrollPlaceViewTypeHeader) {
         if (contentOffset.y <= -self.height) {
             self.y = contentOffset.y ;
@@ -118,12 +117,16 @@ static CGFloat const kAdjustHeight = 70.f;
     }
 }
 
-- (void)adjustPlaceWithContentSize:(id)newSize {
-    CGSize contentSize = [newSize CGSizeValue];
+- (void)adjustPlaceWithContentSize {
+    UIScrollView *scrollView = (UIScrollView *)self.superview;
+    CGSize contentSize = scrollView.contentSize;
     if (self->scrollPlaceViewType == YAScrollPlaceViewTypeHeader) {
         self.y = -self.height;
     } else {
         self.y = contentSize.height;
+        if (self.isFixed) {
+            [self adjustPlaceWithContentOffset];
+        }
     }
 }
 
@@ -149,9 +152,9 @@ static CGFloat const kAdjustHeight = 70.f;
 - (void)scrollToTop {
     if (!self.superview || ![self.superview isKindOfClass:[UIScrollView class]]) return ;
     UIScrollView *scrollView = (UIScrollView *)self.superview;
-    if (scrollView.contentOffset.y  < kAdjustHeight) {
-        CGFloat bar = UIApplication.sharedApplication.statusBarFrame.size.height;
-        CGPoint bottomOffset = CGPointMake(0, - scrollView.contentInset.top - bar);
+    if (scrollView.contentOffset.y < kAdjustHeight) {
+        CGFloat barHeight = UIApplication.sharedApplication.statusBarFrame.size.height;
+        CGPoint bottomOffset = CGPointMake(0, - scrollView.contentInset.top - barHeight);
         [UIView animateWithDuration:self.canAnimate ? self.showAnimationDuration : 0 animations:^{
             [scrollView setContentOffset:bottomOffset animated:NO];
         }];
@@ -173,11 +176,11 @@ static CGFloat const kAdjustHeight = 70.f;
 - (void)observeValueForKeyPath:(NSString *)keyPath ofObject:(id)object change:(NSDictionary *)change context:(void *)context {
     if (context == kYAScrollPlaceViewKVOContext) {
         if([keyPath isEqualToString:NSStringFromSelector(@selector(contentOffset))]) {
-            [self adjustPlaceWithContentOffset:change[NSKeyValueChangeNewKey]];
+            [self adjustPlaceWithContentOffset];
         }
     
         if([keyPath isEqualToString:NSStringFromSelector(@selector(contentSize))]) {
-            [self adjustPlaceWithContentSize:change[NSKeyValueChangeNewKey]];
+            [self adjustPlaceWithContentSize];
         }
         
     } else {
@@ -202,7 +205,8 @@ static CGFloat const kAdjustHeight = 70.f;
     return self;
 }
 
-+ (instancetype)scrollHeaderViewWithSize:(CGSize)size backgroundImage:(UIImage *)image {
++ (instancetype)scrollHeaderViewWithSize:(CGSize)size
+                         backgroundImage:(UIImage *)image {
     YAScrollHeaderView *view = [[YAScrollHeaderView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     imageView.frame = view.bounds;
@@ -222,7 +226,8 @@ static CGFloat const kAdjustHeight = 70.f;
     return self;
 }
 
-+ (instancetype)scrollFooterViewWithSize:(CGSize)size backgroundImage:(UIImage *)image {
++ (instancetype)scrollFooterViewWithSize:(CGSize)size
+                         backgroundImage:(UIImage *)image {
     YAScrollFooterView *view = [[YAScrollFooterView alloc] initWithFrame:CGRectMake(0, 0, size.width, size.height)];
     UIImageView *imageView = [[UIImageView alloc] initWithImage:image];
     imageView.frame = view.bounds;
