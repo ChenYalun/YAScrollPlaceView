@@ -7,33 +7,51 @@
 <a href="http://blog.chenyalun.com"><img src="https://travis-ci.org/ChenYalun/YAScrollPlaceView.svg?branch=master"></a>
 </p>
 
-YAScrollHeaderView is a simple header class for UIScrolView.
-YAScrollFooterView is a simple footer class for UIScrolView.
-
-In addition, YAScrollHeaderView and YAScrollFooterView are subclasses of YAScrollPlaceView.
+YAScrollHeaderView and YAScrollFooterView are subclasses of YAScrollPlaceView.
 
 
 ## Usage
 
 + Adding a header view or a footer view to a UIScrollView is straightforward, e.g:
 
-```objective-c
+#### Add an image view
 
-    YAScrollHeaderView *headerView = [YAScrollHeaderView scrollHeaderViewWithSize:CGSizeMake(self.view.bounds.size.width, 100) backgroundImage:[UIImage imageNamed:@"screenshot.png"]];
-    headerView.isFixed = YES;
+```objective-c
+    // Add a picture to the scrollView as a placeholder.
+    UIImage *headerImage = [UIImage imageNamed:@"header"];
+    YAScrollHeaderView *headerView = [YAScrollHeaderView scrollHeaderViewWithSize:CGSizeMake(self.view.bounds.size.width, 100) backgroundImage:headerImage];
     self.scrollView.scrollHeaderView = headerView;
-    self.scrollView.scrollHeaderView.height = 100;
-    
-    YAScrollFooterView *footerView = [YAScrollFooterView new];
-    self.tableView.scrollFooterView = footerView;
-    self.tableView.scrollFooterView.canAnimate = NO;
-    self.tableView.scrollFooterView.showAnimationDuration = 1.0;
-    self.tableView.scrollFooterView.dismissAnimationDuration = 1.0;
 ```
 
-## Author
+#### Add a blank placeholder
 
-[Aaron](http://chenyalun.com)
+```objective-c
+    // Add a fixed blank placeholder to the tableView.
+    YAScrollFooterView *footerView = [YAScrollFooterView new];
+    footerView.height = 100;
+    footerView.isFixed = YES;
+    self.tableView.scrollFooterView = footerView; 
+```
+
+#### Display or hide dynamically
+
+```objective-c
+    // Display or hide the place view dynamically.
+    self.tableView.scrollHeaderView = self.header;
+    self.header.showAnimationDuration = 0.8f;
+    self.header.dismissAnimationDuration = 0.8f;
+    [self.header show];
+    // [self.header dismissWithCompletion:nil];
+```
+## Demo
+![](/Resource/demo.gif)
+
+## Article
+
+[开源项目：YAScrollPlaceView](https://blog.chenyalun.com/2017/10/01/开源项目：YAScrollPlaceView/)
+
+## Author
+[Yalun, Chen](http://chenyalun.com)
 
 ## License
 

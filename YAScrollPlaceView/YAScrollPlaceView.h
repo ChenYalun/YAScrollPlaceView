@@ -34,8 +34,6 @@ typedef NS_ENUM(NSUInteger, YAScrollPlaceViewType){
 @property (nonatomic, assign, readonly) BOOL isVisible;; ///< default NO.
 @property (nonatomic, assign) NSTimeInterval showAnimationDuration;    ///< default 0.15
 @property (nonatomic, assign) NSTimeInterval dismissAnimationDuration;   ///< default 0.15
-- (void)show;
-- (void)dismiss;
 - (void)showWithCompletion:(YAScrollPlaceViewShowCompletion)completion;
 - (void)dismissWithCompletion:(YAScrollPlaceViewDismissCompletion)completion;
 @end

@@ -41,7 +41,7 @@ static CGFloat const kAdjustHeight = 70.f;
                      forKeyPath:NSStringFromSelector(@selector(contentOffset))
                         options:NSKeyValueObservingOptionNew
                         context:kYAScrollPlaceViewKVOContext];
-    [self show];
+    [self showWithCompletion:nil];
     [self adjustScrollViewTopBottom];
 }
 
@@ -79,20 +79,12 @@ static CGFloat const kAdjustHeight = 70.f;
 }
 
 #pragma mark - Event response
-- (void)show {
-    [self showWithCompletion:nil];
-}
-
 - (void)showWithCompletion:(YAScrollPlaceViewShowCompletion)completion {
     if (self.isVisible) return ;
     [self refreshScrollViewContentInset];
     [self adjustScrollViewTopBottom];
     self.hidden = NO;
     if (completion) { completion(); }
-}
-
-- (void)dismiss {
-    [self dismissWithCompletion:nil];
 }
 
 - (void)dismissWithCompletion:(YAScrollPlaceViewDismissCompletion)completion {
@@ -158,7 +150,8 @@ static CGFloat const kAdjustHeight = 70.f;
     if (!self.superview || ![self.superview isKindOfClass:[UIScrollView class]]) return ;
     UIScrollView *scrollView = (UIScrollView *)self.superview;
     if (scrollView.contentOffset.y  < kAdjustHeight) {
-        CGPoint bottomOffset = CGPointMake(0, - scrollView.contentInset.top);
+        CGFloat bar = UIApplication.sharedApplication.statusBarFrame.size.height;
+        CGPoint bottomOffset = CGPointMake(0, - scrollView.contentInset.top - bar);
         [UIView animateWithDuration:self.canAnimate ? self.showAnimationDuration : 0 animations:^{
             [scrollView setContentOffset:bottomOffset animated:NO];
         }];
